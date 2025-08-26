@@ -10,25 +10,32 @@ import {
     reauthenticateWithCredential,
     EmailAuthProvider
 } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
-import { 
-    getStorage, 
-    ref, 
-    uploadBytes, 
-    getDownloadURL 
+import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
 } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js";
+import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCA472SQszpShn8KaQciXgOJnJEUd6lMvE",
-    authDomain: "destek-ffdf2.firebaseapp.com",
-    projectId: "destek-ffdf2",
-    storageBucket: "destek-ffdf2.firebasestorage.app",
-    messagingSenderId: "1082158355438",
-    appId: "1:1082158355438:web:c7ce6a8baf9c5dad9bb4ff"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const storage = getStorage(app);
+const db = getFirestore(app);
 
 // Menü elementleri
 const navLoginLink = document.getElementById('nav-login-link');
@@ -66,28 +73,31 @@ const newPasswordInput = document.getElementById('new-password');
 
 
 // Dinamik menü ve sayfa geçişleri
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
     if (user) {
         // Kullanıcı giriş yaptıysa
         if (navLoginLink) navLoginLink.style.display = 'none';
         if (navUserInfo) navUserInfo.style.display = 'inline-flex';
 
-        if (navUsername) {
-            navUsername.textContent = `Hoş Geldiniz, ${user.displayName || user.email.split('@')[0]}!`;
+        // Kullanıcı bilgilerini veritabanından al
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        let userProfileData = {};
+
+        if (docSnap.exists()) {
+            userProfileData = docSnap.data();
         }
-        
-        // Profil resmini hem menüde hem de profil sayfasında göster
-        const photoURL = user.photoURL || 'default_profile_pic.png';
+
+        const displayName = user.displayName || user.email.split('@')[0];
+        const photoURL = userProfileData.photoURL || 'default_profile_pic.png';
+
+        if (navUsername) navUsername.textContent = `Hoş Geldiniz, ${displayName}!`;
         if (navProfilePic) {
             navProfilePic.src = photoURL;
             navProfilePic.style.display = 'block';
         }
-        if (profilePic) {
-            profilePic.src = photoURL;
-        }
-
-        // Profil sayfası bilgilerini doldur
-        if (profileName) profileName.textContent = user.displayName;
+        if (profilePic) profilePic.src = photoURL;
+        if (profileName) profileName.textContent = displayName;
         if (profileEmail) profileEmail.textContent = user.email;
         if (profileSignupDate) {
             const date = new Date(user.metadata.creationTime);
@@ -135,24 +145,29 @@ if (showLoginLink) {
 
 // Kayıt olma (login.html)
 if (registerForm) {
-    registerForm.addEventListener('submit', (e) => {
+    registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const ad = registerForm['reg-ad'].value;
         const soyad = registerForm['reg-soyad'].value;
         const email = registerForm['reg-email'].value;
         const password = registerForm['reg-password'].value;
 
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                return updateProfile(userCredential.user, { displayName: `${ad} ${soyad}` });
-            })
-            .then(() => {
-                registerForm.reset();
-                errorMessageDiv.textContent = 'Kayıt başarılı! Yönlendiriliyorsunuz...';
-            })
-            .catch((error) => {
-                errorMessageDiv.textContent = error.message;
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(userCredential.user, { displayName: `${ad} ${soyad}` });
+            
+            // Kullanıcı verilerini Firestore'a kaydet
+            await setDoc(doc(db, "users", userCredential.user.uid), {
+                displayName: `${ad} ${soyad}`,
+                email: email,
+                createdAt: userCredential.user.metadata.creationTime
             });
+
+            registerForm.reset();
+            errorMessageDiv.textContent = 'Kayıt başarılı! Yönlendiriliyorsunuz...';
+        } catch (error) {
+            errorMessageDiv.textContent = error.message;
+        }
     });
 }
 
@@ -200,12 +215,19 @@ if (fileInput) {
         const storageRef = ref(storage, `profile_pictures/${user.uid}`);
         
         try {
+            // Resmi Firebase Storage'a yükle
             await uploadBytes(storageRef, file);
+            
+            // Yüklenen resmin URL'sini al
             const photoURL = await getDownloadURL(storageRef);
-            await updateProfile(user, { photoURL: photoURL });
+
+            // Kullanıcı veritabanı belgesini bul ve resim URL'sini ekle
+            await setDoc(doc(db, "users", user.uid), { photoURL: photoURL }, { merge: true });
+            
+            alert('Profil resmi başarıyla güncellendi!');
             location.reload(); // Sayfayı yenilemek için
         } catch (error) {
-            console.error('Profil resmi yüklenirken hata oluştu:', error);
+            alert('Profil resmi yüklenirken bir hata oluştu: ' + error.message);
         }
     });
 }
@@ -228,6 +250,10 @@ if (editProfileForm) {
         if (user && newName) {
             try {
                 await updateProfile(user, { displayName: newName });
+                
+                // Firestore'daki displayName'i de güncelle
+                await setDoc(doc(db, "users", user.uid), { displayName: newName }, { merge: true });
+                
                 alert('Profil başarıyla güncellendi!');
                 location.reload();
             } catch (error) {
