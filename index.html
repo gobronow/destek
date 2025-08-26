@@ -13,8 +13,11 @@
         <nav>
             <a href="index.html">Anasayfa</a>
             <a href="contact.html">İletişim</a>
-            <a href="login.html?form=giris-yap">Giriş Yap</a>
-            <a href="login.html?form=kayit-ol">Üye Ol</a>
+            <a href="login.html?form=giris-yap" id="nav-login-link">Giriş Yap</a>
+            <span id="nav-user-info" style="display: none;">
+                <span id="nav-username"></span>
+                <a href="#" id="nav-logout-link">Çıkış Yap</a>
+            </span>
         </nav>
     </header>
 
@@ -32,6 +35,9 @@ Dövme sıradan değildi. Çünkü bu yüz, bir zamanlar Aras’ın hayatındaki
             </div>
         </section>
     </main>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js"></script>
+    <script type="module" src="auth.js"></script>
 
 </body>
 </html>
