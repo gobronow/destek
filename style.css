@@ -1,0 +1,227 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #e0e0e0;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+
+    background-image: url('v.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: rgba(18, 18, 18, 0.6);
+    background-blend-mode: overlay;
+}
+
+header {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #ffffff;
+    padding: 2rem 0;
+    text-align: center;
+    border-bottom: 5px solid #3498db;
+}
+
+header h1 {
+    text-shadow: 2px 2px 4px #000000;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+header h1:hover {
+    color: #00ffff;
+    transform: translateY(-10px) rotate(5deg) translateX(10px);
+}
+
+nav {
+    margin-top: 1rem;
+}
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: rgba(52, 152, 219, 0.5);
+}
+
+/* ANA SAYFANIN DÜZENİ */
+main {
+    max-width: 900px;
+    margin: auto;
+    padding: 1rem;
+    flex-grow: 1;
+    background-color: transparent;
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+.character-card {
+    background-color: rgba(30, 30, 30, 0.9);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.character-card:hover {
+    transform: scale(1.05);
+}
+
+.character-image {
+    width: 100%;
+    max-width: 300px;
+    height: 500px;
+    border-radius: 8px;
+    border: 3px solid #3498db;
+}
+
+.character-info {
+    flex: 1;
+    text-align: center;
+}
+
+.character-info h2 {
+    color: #3498db;
+    font-size: 2.5rem;
+    margin-top: 0;
+}
+
+.character-info p {
+    font-size: 1.1rem;
+    color: #cccccc;
+}
+
+.character-info ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+.character-info li {
+    background-color: #2c3e50;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    color: #e74c3c;
+    border-left: 4px solid #1abc9c;
+}
+
+.character-info li strong {
+    color: #e0e0e0;
+}
+
+/* DESTEK SAYFASININ YENİ DÜZENİ */
+.contact-page {
+    max-width: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.ticket-form {
+    background-color: rgba(30, 30, 30, 0.9);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    padding: 2.5rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 1200px;
+    text-align: left; /* Metin sola hizalandı */
+}
+
+.ticket-header {
+    text-align: center;
+    color: #3498db;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 1rem;
+}
+
+.ticket-header .fas {
+    color: #bdc3c7;
+    margin-right: 15px;
+}
+
+.ticket-info-text {
+    text-align: center;
+    font-style: italic;
+    color: #95a5a6;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #cccccc;
+    font-size: 1.1rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 1.2rem;
+    border: 2px solid #ccc;
+    background-color: #2c3e50;
+    color: #e0e0e0;
+    border-radius: 5px;
+    box-sizing: border-box; 
+    font-size: 1.2rem;
+}
+
+.form-group textarea {
+    height: 150px;
+    resize: vertical; 
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 1.5rem;
+    background-color: #bdc3c7;
+    color: #1a1a1a;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #95a5a6;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem 0;
+    background-color: #1a1a1a;
+    font-size: 0.9rem;
+    color: #888888;
+}
