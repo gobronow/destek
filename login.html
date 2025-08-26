@@ -15,6 +15,7 @@
             <a href="contact.html">İletişim</a>
             <a href="login.html" id="nav-login-link">Giriş Yap</a>
             <span id="nav-user-info" style="display: none;">
+                <img id="nav-profile-pic" src="" alt="Profil Resmi" style="display: none;">
                 <a href="profile.html" id="nav-username"></a>
                 <a href="#" id="nav-logout-link">Çıkış Yap</a>
             </span>
@@ -37,7 +38,7 @@
                 <div id="error-message"></div>
                 <p>Hesabın yok mu? <a href="#" id="show-register">Kayıt Ol</a></p>
             </form>
-
+            
             <form id="register-form" style="display: none;">
                 <h2>Yeni Üyelik</h2>
                 <div class="form-group">
@@ -47,10 +48,6 @@
                 <div class="form-group">
                     <label for="reg-soyad">Soyadınız:</label>
                     <input type="text" id="reg-soyad" required>
-                </div>
-                <div class="form-group">
-                    <label for="reg-sehir">Şehir:</label>
-                    <input type="text" id="reg-sehir" required>
                 </div>
                 <div class="form-group">
                     <label for="reg-email">E-posta:</label>
@@ -68,7 +65,8 @@
 
     <script type="module" src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js"></script>
     <script type="module" src="auth.js"></script>
-
 </body>
 </html>
