@@ -13,7 +13,12 @@
         <h1>GTA V ONLİNE </h1>
         <nav>
             <a href="index.html">Anasayfa</a>
-            <a href="contact.html">Destek</a>
+            <a href="contact.html">İletişim</a>
+            <a href="login.html?form=giris-yap" id="nav-login-link">Giriş Yap</a>
+            <span id="nav-user-info" style="display: none;">
+                <span id="nav-username"></span>
+                <a href="#" id="nav-logout-link">Çıkış Yap</a>
+            </span>
         </nav>
     </header>
 
@@ -42,6 +47,8 @@
             </form>
         </section>
     </main>
-    
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js"></script>
+    <script type="module" src="auth.js"></script>
 </body>
 </html>
